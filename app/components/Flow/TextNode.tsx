@@ -1,8 +1,8 @@
 import React from 'react';
-import { Handle, Position, NodeProps, useReactFlow } from '@xyflow/react';
+import { Handle, Position, NodeProps } from '@xyflow/react';
 import { MessageCircle } from 'lucide-react';
 
-export default function TextNode({ id, data }: NodeProps) {
+export default function TextNode({ data }: NodeProps) {
     return (
         <div className="bg-white border rounded-lg shadow-sm min-w-64 max-w-sm flex flex-col overflow-hidden">
             {/* Target Handle - Left Side for incoming connections */}
