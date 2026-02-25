@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# React Flow Messaging Application
+> **Assignment by Nitin Walia** 
 
-## Getting Started
+A dynamic, drag-and-drop flowchart builder designed to create and manage messaging node sequences. Built with React Flow, Next.js, and styled with Tailwind CSS.
 
-First, run the development server:
+## 🚀 Features
+- **Drag & Drop Canvas:** Add message nodes seamlessly by dragging them from the panel or clicking them for auto-placement.
+- **Dynamic Connections:** Visually connect nodes together to document conversation flows.
+- **Smart Edge Routing:** 
+  - Source handles (Right side) are restricted to strictly **1 outgoing connection**.
+  - Target handles (Left side) effortlessly accept **multiple incoming connections**.
+- **Integrated Node Editing:** Click on any node to open the settings panel to update the text message or delete the node entirely.
+- **Smooth UX:** Includes loading skeletons, toast notifications (`react-hot-toast`), dotted backgrounds, and zoom-to-fit auto focus.
+- **Validation Engine:** Automatically validates the board state to ensure nodes aren't left floating without incoming connections before saving.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 📁 Project Structure
+
+```text
+my-app/
+├── app/
+│   ├── components/
+│   │   ├── Flow/
+│   │   │   └── TextNode.tsx        # The custom visual node component (handles, icons, text).
+│   │   ├── Header/
+│   │   │   └── Header.tsx          # Top nav bar containing the assignment branding and Save validation logic.
+│   │   ├── Home/
+│   │   │   └── Main.tsx            # The core engine. Manages state, the React Flow instance, and canvas events.
+│   │   └── Sidebar/
+│   │       ├── Sidebar.tsx         # The right-hand column container.
+│   │       ├── NodesPanel.tsx      # Draggable toolbox containing the spawnable 'Message' block.
+│   │       └── SettingsPanel.tsx   # Editor panel that appears when a node is selected (text editing/deletion).
+│   ├── globals.css                 # Global Tailwind imports.
+│   └── page.tsx                    # Next.js root entry point.
+└── package.json                    # Project dependencies (React Flow, Lucide Icons, Hot Toast).
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔄 Core Data Flow
+1. **State Management (`Main.tsx`)**
+   - The application relies on two primary arrays of state: `nodes` and `edges`.
+   - When the user drags a node from `NodesPanel.tsx` and drops it onto the `<ReactFlow>` canvas, `Main.tsx` intercepts the `onDrop` event, calculates the screen-to-flow coordinates using `reactFlowInstance`, and pushes it to the `nodes` array.
+2. **Node Rendering (`TextNode.tsx`)**
+   - React Flow iterates over the `nodes` array. When it encounters a type of `textNode`, it mounts our custom `TextNode.tsx` component, passing down the data.
+3. **Connections**
+   - When a user draws a line between the Source Handle and Target Handle, the `onConnect` function in `Main.tsx` validates the edge rules (preventing multiple source outputs) before committing the line to the `edges` array.
+4. **Mutating Nodes (`SettingsPanel.tsx`)**
+   - Clicking a node triggers `onSelectionChange`, opening the Settings sidebar.
+   - Editing the text area fires `handleTextChange`, mapping over the `nodes` array and dynamically updating the text label in real-time on the canvas. 
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🛠️ Installation & Setup
+1. Clone the repository and navigate into the `my-app` directory.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+4. Open [http://localhost:3000](http://localhost:3000) in your browser to start building flows!
